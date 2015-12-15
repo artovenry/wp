@@ -1,0 +1,11 @@
+{
+    "name": "artovenry/wp",
+    "description": "WordPress framework for Artovenry.",
+    "authors": [
+        {
+            "name": "artovenry",
+            "email": "artovenry@gmail.com"
+        }
+    ],
+    "require": {}
+}
