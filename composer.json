@@ -7,5 +7,10 @@
             "email": "artovenry@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload":{
+      "psr-4":{
+        "Artovenry\\": ["lib/"]
+      }
+    }
 }
