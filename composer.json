@@ -7,7 +7,11 @@
             "email": "artovenry@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "artovenry/haml": "dev-master",
+        "artovenry/view_helper": "dev-master",
+        "symfony/yaml": "^2.7.5"
+    },
     "autoload":{
       "psr-4":{
         "Artovenry\\": ["lib/"]

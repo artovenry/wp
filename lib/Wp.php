@@ -1,6 +1,0 @@
-<?
-namespace Artovenry;
-
-class Wp{
-  
-}
