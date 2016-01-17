@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "db85365082e4dfdce7bd8740e399ecd5",
-    "content-hash": "f399c5547b910f4b009040e7f8c305a5",
+    "hash": "26d8a18a2fa2d985278817a4bb8d65fb",
+    "content-hash": "65b3f0c9cce975d16fbfd1112b594b59",
     "packages": [
         {
             "name": "artovenry/haml",
@@ -17,7 +17,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "file:///Users/showtarow/Satis/local/dist/artovenry-haml-365bf7a8555885ff66d2680d1936fb680c89bbf6-zip-742adb.zip",
+                "url": "https://api.github.com/repos/artovenry/haml/zipball/365bf7a8555885ff66d2680d1936fb680c89bbf6",
                 "reference": "365bf7a8555885ff66d2680d1936fb680c89bbf6",
                 "shasum": "dece986006a68149270788515cd942637ff19fde"
             },
@@ -56,7 +56,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "file:///Users/showtarow/Satis/local/dist/artovenry-view_helper-0c541f27ec2986a6cbe3c9787e3f38d9f8b0e812-zip-6c0dd3.zip",
+                "url": "https://api.github.com/repos/artovenry/view_helper/zipball/0c541f27ec2986a6cbe3c9787e3f38d9f8b0e812",
                 "reference": "0c541f27ec2986a6cbe3c9787e3f38d9f8b0e812",
                 "shasum": "679835c640b65f858fc196553716b78a0b15b1e0"
             },
@@ -148,6 +148,55 @@
                 "HAML"
             ],
             "time": "2015-12-17 09:48:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v2.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "file:///Users/showtarow/Satis/local/dist/symfony-yaml-34c8a4b51e751e7ea869b8262f883d008a2b81b8-zip-5042ac.zip",
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8",
+                "shasum": "ec2b5b59e7e7b874dbb06ddf5b96c31a9c68dc54"
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-01-13 10:28:07"
         }
     ],
     "packages-dev": [],
