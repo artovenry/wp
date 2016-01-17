@@ -7,6 +7,10 @@
             "email": "artovenry@gmail.com"
         }
     ],
+    "repositories":[
+        {"type": "vcs", "url": "https://github.com/artovenry/haml"},
+        {"type": "vcs", "url": "https://github.com/artovenry/view_helper"}
+    ],
     "require": {
         "artovenry/haml": "dev-master",
         "artovenry/view_helper": "dev-master",
