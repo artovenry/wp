@@ -11,7 +11,7 @@
         "artovenry/haml": "1.0.0",
         "artovenry/view_helper": "1.0.0",
         "symfony/yaml": "^2.7.5"
-    }
+    },
     "autoload":{
       "psr-4":{
         "Artovenry\\": ["lib/"]
