@@ -20,7 +20,7 @@ abstract class PostType{
     add_action("after_switch_theme", "flush_rewrite_rules");
     foreach($classes as $class){
       foreach($class::$meta_boxes as $attr=>$value)
-        $class::$meta_box_classes[$attr]= new PostType\MetaBox($class::$post_type, $attr, $value);
+        $class::$meta_box_classes[$attr]= new PostType\MetaBox($class, $attr, $value);
       add_action("init", "{$class}::add_post_type");
       add_filter("post_type_link", "{$class}::permalink", 10, 2);
       add_action("save_post_{$class::$post_type}",  "{$class}::_after_save", 10, 2);
@@ -29,17 +29,17 @@ abstract class PostType{
   }
 
   static function meta($post, $attr){
-    return get_post_meta($post->ID, static::$meta_box[$attr]->meta_key(), true);
+    return get_post_meta($post->ID, static::meta_key_for($attr), true);
   }
 
-  static function meta_key_for($post_type, $attr){
-    return $post_type . "_" . $attr;
+  static function meta_key_for($attr){
+    return static::$post_type . "_" . $attr;
   }
 
   static function _before_save($data){
     if(static::$post_type !== $data["post_type"])return $data;
     foreach(static::$meta_box_classes as $attr=>$meta_box)
-      $data= static::before_save($data, $attr, $_POST[$meta_box->meta_key()]);
+      $data= static::before_save($data, $attr, $_POST[static::meta_key_for($attr)]);
     return $data;
   }
   static function before_save($data, $attr){return $data;}
@@ -49,7 +49,7 @@ abstract class PostType{
     foreach(static::$meta_box_classes as $attr=>$meta_box){
       if(!$meta_box->is_authorized($post_id))return false;
       $meta_box->after_save($post);
-      static::after_save($post, $attr, $_POST[$meta_box->meta_key()]);
+      static::after_save($post, $attr, $_POST[static::meta_key_for($attr)]);
     }
   }
   //NOOP

@@ -9,6 +9,7 @@ class MetaBox{
   use MetaMethods;
 
   private $post_type;
+  private $post_type_class;
   private $attribute;
   //private $priority;
   //private $context;
@@ -17,8 +18,9 @@ class MetaBox{
 
   //private $meta_key;
 
-  function __construct($post_type, $attribute, $options){
-    $this->post_type= $post_type;
+  function __construct($post_type_class, $attribute, $options){
+    $this->post_type_class= $post_type_class;
+    $this->post_type= $post_type_class::$post_type;
     $this->attribute= $attribute;
     $this->options= array_merge([
       "priority"=>self::DEFAULT_PRIORITY,
@@ -37,7 +39,7 @@ class MetaBox{
   */
 
   function meta_key(){
-    return $this->post_type . "_" . $this->attribute;
+    return ($this->post_type_class)::meta_key_for($this->attribute);
   }
   function view_path(){
     return defined("ART_VIEW")? ART_VIEW . "/meta_boxes" : "meta_boxes";
