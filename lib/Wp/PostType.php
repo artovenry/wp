@@ -28,7 +28,7 @@ abstract class PostType{
     }
   }
 
-  static add_meta_box_classes($attr, $object){
+  static function add_meta_box_classes($attr, $object){
     static::$meta_box_classes[$attr]= $object;
   }
 
