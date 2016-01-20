@@ -22,7 +22,7 @@ class MetaBox{
     $this->post_type_class= $post_type_class;
     $this->post_type= $post_type_class::$post_type;
     $this->attribute= $attribute;
-    $this->options= array_merge([
+    $this->options= array_merge(
       "priority"=>self::DEFAULT_PRIORITY,
       "context"=>self::DEFAULT_CONTEXT
     ],$options);
@@ -39,7 +39,8 @@ class MetaBox{
   */
 
   function meta_key(){
-    return ($this->post_type_class)::$meta_key_for($this->attribute);
+    $class= $this->post_type_class;
+    return $class::meta_key_for($this->attribute);
   }
   function view_path(){
     return defined("ART_VIEW")? ART_VIEW . "/meta_boxes" : "meta_boxes";
