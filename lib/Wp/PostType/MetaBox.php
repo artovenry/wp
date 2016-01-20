@@ -39,7 +39,7 @@ class MetaBox{
   */
 
   function meta_key(){
-    return ($this->post_type_class)::meta_key_for($this->attribute);
+    return ($this->post_type_class)::$meta_key_for($this->attribute);
   }
   function view_path(){
     return defined("ART_VIEW")? ART_VIEW . "/meta_boxes" : "meta_boxes";
