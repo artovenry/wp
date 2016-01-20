@@ -20,12 +20,16 @@ abstract class PostType{
     add_action("after_switch_theme", "flush_rewrite_rules");
     foreach($classes as $class){
       foreach($class::$meta_boxes as $attr=>$value)
-        $class::$meta_box_classes[$attr]= new PostType\MetaBox($class, $attr, $value);
+        $class::add_meta_box_classes($attr, new PostType\MetaBox($class, $attr, $value));
       add_action("init", "{$class}::add_post_type");
       add_filter("post_type_link", "{$class}::permalink", 10, 2);
       add_action("save_post_{$class::$post_type}",  "{$class}::_after_save", 10, 2);
       add_filter("wp_insert_post_data", "{$class}::_before_save");
     }
+  }
+
+  static add_meta_box_classes($attr, $object){
+    static::$meta_box_classes[$attr]= $object;
   }
 
   static function meta($post, $attr){
