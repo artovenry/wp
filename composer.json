@@ -8,13 +8,8 @@
         }
     ],
     "require": {
-        "artovenry/haml": "dev-master",
-        "artovenry/view_helper": "dev-master",
-        "symfony/yaml": "^2.7.5"
-    },
-    "require-dev": {
-        "artovenry/haml": "dev-master",
-        "artovenry/view_helper": "dev-master",
+        "artovenry/haml": "1.0.0",
+        "artovenry/view_helper": "1.0.0",
         "symfony/yaml": "^2.7.5"
     },
     "autoload":{
