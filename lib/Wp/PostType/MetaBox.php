@@ -22,7 +22,7 @@ class MetaBox{
     $this->post_type_class= $post_type_class;
     $this->post_type= $post_type_class::$post_type;
     $this->attribute= $attribute;
-    $this->options= array_merge(
+    $this->options= array_merge([
       "priority"=>self::DEFAULT_PRIORITY,
       "context"=>self::DEFAULT_CONTEXT
     ],$options);
