@@ -4,6 +4,7 @@ namespace Artovenry\Wp;
 //TODO メニュー位置は一番上！
 //TODO REQUIRE Artovenry\Haml
 
+
 abstract class PostType{
   use PostType\Rewrite;
 
@@ -11,25 +12,33 @@ abstract class PostType{
   const HIERARCHICAL= false; 
   const REWRITE= false;
 
-  static $meta_boxes= [];
+  static $meta_box_classes= [];
   protected static $public= true;
   protected static $supports= self::SUPPORTS;
 
   static function run($classes){
     add_action("after_switch_theme", "flush_rewrite_rules");
     foreach($classes as $class){
-      foreach($class::$meta_boxes as $attr=>&$value)
-        //$value= new PostType\MetaBox($class::$post_type, $attr, $value["label"], $value["priority"], $value["context"]);
-        $value= new PostType\MetaBox($class::$post_type, $attr, $value);
+      foreach($class::$meta_boxes as $attr=>$value)
+        $class::$meta_box_classes[$attr]= new PostType\MetaBox($class::$post_type, $attr, $value);
       add_action("init", "{$class}::add_post_type");
       add_filter("post_type_link", "{$class}::permalink", 10, 2);
       add_action("save_post_{$class::$post_type}",  "{$class}::_after_save", 10, 2);
       add_filter("wp_insert_post_data", "{$class}::_before_save");
     }
   }
+
+  static function meta($post, $attr){
+    return get_post_meta($post->ID, static::$meta_box[$attr]->meta_key(), true);
+  }
+
+  static function meta_key_for($post_type, $attr){
+    return $post_type . "_" . $attr;
+  }
+
   static function _before_save($data){
     if(static::$post_type !== $data["post_type"])return $data;
-    foreach(static::$meta_boxes as $attr=>$meta_box)
+    foreach(static::$meta_box_classes as $attr=>$meta_box)
       $data= static::before_save($data, $attr, $_POST[$meta_box->meta_key()]);
     return $data;
   }
@@ -37,7 +46,7 @@ abstract class PostType{
 
   static function _after_save($post_id, $post){
     if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return false;
-    foreach(static::$meta_boxes as $attr=>$meta_box){
+    foreach(static::$meta_box_classes as $attr=>$meta_box){
       if(!$meta_box->is_authorized($post_id))return false;
       $meta_box->after_save($post);
       static::after_save($post, $attr, $_POST[$meta_box->meta_key()]);
@@ -52,7 +61,7 @@ abstract class PostType{
   }
 
   static function register_meta_boxes(){
-    foreach(array_values(static::$meta_boxes) as $meta_box)
+    foreach(array_values(static::$meta_box_classes) as $meta_box)
       $meta_box->register();
   }
 
