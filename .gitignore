@@ -1,1 +1,4 @@
 /vendor/
+WORK
+node_modules
+package.json
