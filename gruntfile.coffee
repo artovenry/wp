@@ -22,20 +22,12 @@ module.exports= (grunt)->
         livereload: enabled: yes, extensions: [
           'php', 'haml', 'html'
         ]
-      "php": ->["shell:phpunit"]
+      "php": ->["test"]
     shell:
       phpunit:
         command: "phpunit --bootstrap test/bootstrap.php --configuration test/phpunit.xml"
         options:
-          failOnError: no
-    ###    
-    phpunit:
-      all:
-        #command: "phpunit"
-        options:
-          bootstrap: "test/tests/bootstrap.php"
-          configuration: "phpunit.xml"
-    ###
+          failOnError: yes
 
   require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks)
   grunt.task.run 'notify_hooks'
