@@ -16,10 +16,9 @@ class TestEvent extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $this->assertEquals(Event::take()->post_type, "event");
   }
   function test_a_life_without_using_callback(){
-    $event= Event::take();
+    $event= Event::build(get_posts("post_type=event")[0]);
     $event->set_meta("show_at_home", "yes");
     $this->assertEquals($event->show_at_home, "yes");
   }
 }
-
 
