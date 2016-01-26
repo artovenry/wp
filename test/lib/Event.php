@@ -6,7 +6,7 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
   static $post_type_options=[
     "label"=>"ライブ"
   ];
-  static $meta_attributes= ["show_at_home", "scheduled_on"];
+  static $meta_attrs= ["show_at_home", "scheduled_on"];
   static $meta_box_options=[
     "show_at_home"=> [
       "label"=> "トップページに表示"
@@ -15,4 +15,5 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
       "label"=> "日時"
     ]
   ];
+
 }

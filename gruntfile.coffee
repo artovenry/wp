@@ -1,12 +1,8 @@
 module.exports= (grunt)->
   PROJECT_NAME= "artovenry wp"
-  HOSTNAME= "showtarow.local"
+  HOSTNAME= "localhost"
   PORT= 3000
   PORT_LIVERELOAD= 30000
-  THEME_PATH= "theme"
-  ASSETS_PATH= "#{THEME_PATH}/assets"
-  JS_PATH= "#{ASSETS_PATH}/js"
-  CSS_PATH= "#{ASSETS_PATH}/css"
 
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
@@ -18,22 +14,34 @@ module.exports= (grunt)->
           'lib/**/'
           'test/tests/**'
           'test/lib/**'
+          'dev/theme/**'
         ]
         livereload: enabled: yes, extensions: [
           'php', 'haml', 'html'
         ]
-      "php": ->["test"]
+      "php": (path)->
+        ["test"] unless path.match /^dev\//
     shell:
       phpunit:
         command: "phpunit --bootstrap test/bootstrap.php --configuration test/phpunit.xml"
         options:
           failOnError: yes
+    php:
+      server: options: port:PORT, hostname: '0.0.0.0', base: 'dev/wp', silent: on
+    connect:
+      front:
+        options: port: PORT_LIVERELOAD, hostname: HOSTNAME, livereload: yes, open: no, middleware: ->
+          [require('grunt-connect-proxy/lib/utils').proxyRequest]
+      proxies: [context: "/", host: HOSTNAME, port:PORT]
 
   require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks)
   grunt.task.run 'notify_hooks'
 
   grunt.registerTask 'test',['shell:phpunit']
   grunt.registerTask 'default', [
+    'php:server'
+    'configureProxies'
+    'connect:front'
     'test'
     'esteWatch'
   ]

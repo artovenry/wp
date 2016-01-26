@@ -1,0 +1,25 @@
+<?
+use Test\Event;
+class TestEvent extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
+
+  function setUp(){
+    Event::register();
+    $this->create_post("event", 10);
+
+  }
+  function test_sample(){
+    $this->assertCount(10, Test\Event::fetch("posts_per_page=10"));
+    foreach(Event::where("posts_per_page=3") as $item){
+      $this->assertInstanceOf("Test\Event", $item);
+    }
+    $this->assertEquals(Event::take()->post_status, "publish");
+    $this->assertEquals(Event::take()->post_type, "event");
+  }
+  function test_a_life_without_using_callback(){
+    $event= Event::take();
+    $event->set_meta("show_at_home", "yes");
+    $this->assertEquals($event->show_at_home, "yes");
+  }
+}
+
+

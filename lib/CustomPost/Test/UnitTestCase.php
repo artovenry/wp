@@ -1,5 +1,7 @@
 <?
 namespace Artovenry\Wp\CustomPost\Test;
+use Artovenry\Wp\CustomPost\Constants;
+
 class UnitTestCase extends \Wp_UnitTestCase{
   const DEFAULT_NUM_FOR_CREATE_POST= 10;
 
