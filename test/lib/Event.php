@@ -20,4 +20,7 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
       "template"=>"boge"
     ]
   ];
+
+  //static function after_save($post_id, $post, $updated){
+  //}
 }

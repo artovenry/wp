@@ -2,7 +2,6 @@
 namespace Artovenry\Wp\CustomPost;
 
 abstract class Base{
-  use Callback;
   use Query;
   use PostMeta;
   private $post;
@@ -15,29 +14,39 @@ abstract class Base{
       if($name === $attr)return $this->get_meta($attr);
     return $this->post->$name;
   }
+
+
   static function register(){
-    register_post_type(static::$post_type, static::post_type_options());
-    add_action("save_post_" . static::$post_type, get_called_class() . "::_after_save", 10, 3);
-    add_filter("wp_insert_post_data", get_called_class() . "::_before_save", 10, 2);
+    $meta_boxes= MetaBox::init(get_called_class());
+    static::register_post_type($meta_boxes);
+    add_action("save_post_" . static::$post_type, function($post_id, $post, $updated)use($meta_boxes){
+      foreach($meta_boxes as $item)$item->after_save($post_id, $post, $updated);
+      static::after_save($post_id, $post, $updated);
+    }, 10, 3);
+    add_filter("wp_insert_post_data", function($data, $postarr){
+      if(static::$post_type !== $data["post_type"])return $data;
+      return static::before_save($data, $postarr);
+    },10,2);
   }
-  function set_meta($attr, $value){
-    $this->create_or_update_meta($attr, $value);
-  }
-  function delete_meta($attr){
-    $this->delete_meta($attr);
-  }
-  private static function post_type_options(){
+
+  static function after_save($post_id, $post, $updated){}//NOOP
+  static function before_save($data, $postarr){return $data;}//NOOP
+
+  private static function register_post_type($meta_boxes){
     $options= static::$post_type_options;
-    $options["register_meta_box_cb"]= function(){
-      MetaBox::init(get_called_class());
+    if(empty($options))$options= [];
+    if(empty($options["label"])) $options["label"]= static::$post_type;
+    $options= array_merge(Constants::DEFAULT_POST_TYPE_OPTIONS, $options);
+    $options["register_meta_box_cb"]= function()use($meta_boxes){
+      foreach($meta_boxes as $meta_box)
+        $meta_box->register();
     };
-    if(empty($options["label"]))
-      $options["label"]= static::$post_type;
-    return array_merge(Constants::DEFAULT_POST_TYPE_OPTIONS, $options);
+    register_post_type(static::$post_type, $options);
   }
   private function __construct($post_or_post_id){
-    $this->post= is_int($post_or_post_id)? get_post($post_or_post_id): $post_or_post_id;
-    $this->post_id= is_int($post_or_post_id)? $post_or_post_id: $post_or_post_id->ID;
+    $p= $post_or_post_id;
+    $this->post= is_int($p)? get_post($p): $p;
+    $this->post_id= is_int($p)? $p: $p->ID;
   }
 
 }

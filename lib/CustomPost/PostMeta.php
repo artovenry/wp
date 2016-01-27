@@ -11,6 +11,11 @@ trait PostMeta{
   function get_meta($attr){
     return get_post_meta($this->post_id, static::meta_key_for($attr), true);
   }
+
+  function set_meta($attr, $value){
+    $this->create_or_update_meta($attr, $value);
+  }
+
   private static function meta_key_for($attr){
     return Constants::PREFIX . "_" . static::$post_type . "_" . $attr;
   }

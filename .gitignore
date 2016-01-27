@@ -3,3 +3,4 @@ WORK
 node_modules
 package.json
 dev/wp/*
+composer.lock
