@@ -2,10 +2,10 @@
 use Test\Event;
 class TestEvent extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 
-  function setUp(){
-    Event::register();
-    $this->create_post("event", 10);
+  function test_noop(){}
 
+  function setUp(){
+    $this->create_post("event", 10);
   }
   function test_sample(){
     $this->assertCount(10, Test\Event::fetch("posts_per_page=10"));
@@ -20,5 +20,6 @@ class TestEvent extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $event->set_meta("show_at_home", "yes");
     $this->assertEquals($event->show_at_home, "yes");
   }
+
 }
 

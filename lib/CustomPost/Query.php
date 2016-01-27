@@ -2,9 +2,6 @@
 namespace Artovenry\Wp\CustomPost;
 
 trait Query{
-  static function build($post_or_post_id){
-    return new static($post_or_post_id);
-  }
   static function where($args=[]){
     foreach(get_posts(static::parse_args($args)) as $item)
       yield static::build($item);

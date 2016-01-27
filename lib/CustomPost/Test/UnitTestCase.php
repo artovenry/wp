@@ -6,11 +6,13 @@ class UnitTestCase extends \Wp_UnitTestCase{
   const DEFAULT_NUM_FOR_CREATE_POST= 10;
 
   protected static function factory_for($post_type) {
-    static $factory = null;
+/*    static $factory = null;
     if ( ! $factory ) {
       $factory = new UnitTest_Factory($post_type);
     }
     return $factory;
+*/
+    return new UnitTest_Factory($post_type);
   }
 
   //SHOULD RESIDES HERE

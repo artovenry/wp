@@ -3,7 +3,7 @@ namespace Artovenry\Wp\CustomPost;
 
 class MetaBox{
   static function init($class){
-    if(empty($class::$meta_box_options))return false;
+    if(empty($class::$meta_box_options))return [];
     $meta_boxes= [];
     foreach($class::$meta_box_options as $attr=>$options)
       $meta_boxes[]= new self($class, $attr, $options);
@@ -48,9 +48,9 @@ class MetaBox{
     if(!wp_verify_nonce($_POST[$this->nonce_key()], $this->name)) return false;
     $class= $this->class;
     if(!empty($value= $_POST[$this->name]))
-      $class::build($post)->set_meta($attr, $value);
+      $class::build($post)->set_meta($this->attribute, $value);
     else
-      $class::build($post)->delete_meta($attr);
+      $class::build($post)->delete_meta($this->attribute);
   }
 
   private function template(){

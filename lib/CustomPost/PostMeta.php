@@ -10,6 +10,7 @@ trait PostMeta{
   }
   function get_meta($attr){
     return get_post_meta($this->post_id, static::meta_key_for($attr), true);
+
   }
 
   function set_meta($attr, $value){

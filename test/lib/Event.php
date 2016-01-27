@@ -10,7 +10,7 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
   static $meta_box_options=[
     "show_at_home"=> [
       "label"=> "トップページに表示",
-      "default"=>"top",
+      "template"=>"show_at_home"
     ],
     "scheduled_on"=> [
       "label"=> "日時"
@@ -20,6 +20,11 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
       "template"=>"boge"
     ]
   ];
+
+  function show_at_home(){
+    if($this->is_auto_draft())return "top";
+    return parent::show_at_home();
+  }
 
   //static function after_save($post_id, $post, $updated){
   //}
