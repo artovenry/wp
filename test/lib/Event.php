@@ -21,11 +21,6 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
     ]
   ];
 
-  function show_at_home(){
-    if($this->is_auto_draft())return "top";
-    return parent::show_at_home();
-  }
-
   //static function after_save($post_id, $post, $updated){
   //}
 }

@@ -1,7 +1,6 @@
 <?
 namespace Artovenry\Wp\CustomPost;
 
-class MethodNotFound extends \Exception{}
 abstract class Base{
   use Query;
   use PostMeta;
@@ -13,20 +12,11 @@ abstract class Base{
   function __get($name){
     if($name==="post")return $this->post;
     if($name==="post_id")return $this->post_id;
-    foreach(static::$meta_attrs as $attr){
-      if(method_exists($this, $attr) AND $attr === $name)
-        return $this->$attr();
+    foreach(static::$meta_attrs as $attr)
       if($name === $attr)return $this->get_meta($attr);
-    }
     return $this->post->$name;
   }
 
-  function __call($name, $args){
-    foreach(static::$meta_attrs as $attr){
-      if($name === $attr)return $this->get_meta($attr);
-    }
-    return false;
-  }
   function is_auto_draft(){
     return $this->post->post_status === "auto-draft";
   }
