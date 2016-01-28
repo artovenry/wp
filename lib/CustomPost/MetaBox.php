@@ -31,9 +31,12 @@ class MetaBox{
     $attr= $this->attribute;
     $value= $post->$attr;
     $args=array_merge([
+      "post_type"=>$post_type,
       $post_type=>$post,
       $attr=>$value,
-      "name"=>$this->name
+      //"name"=>$this->name
+      // eg: name="event[show_on_top]"
+      "name"=>"{$post_type}[{$attr}]"
     ], $args);
     render_template($this->template(), $args);
   }
@@ -47,7 +50,8 @@ class MetaBox{
     if(!current_user_can("edit_post", $post_id)) return false;
     if(!wp_verify_nonce($_POST[$this->nonce_key()], $this->name)) return false;
     $class= $this->class;
-    if(!empty($value= $_POST[$this->name]))
+    $posted_value= $_POST[$post->post_type][$this->attribute];
+    if(!empty($value= $posted_value))
       $class::build($post)->set_meta($this->attribute, $value);
     else
       $class::build($post)->delete_meta($this->attribute);

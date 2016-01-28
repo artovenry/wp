@@ -5,7 +5,6 @@ abstract class Base{
   use Query;
   use PostMeta;
   use Route;
-
   private $post;
   private $post_id;
 
