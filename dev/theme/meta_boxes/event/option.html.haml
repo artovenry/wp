@@ -1,0 +1,7 @@
+- extract(Artovenry\Wp\CustomPost\FormHelper::helpers())
+%p
+  != $_label_for($event, "show_at_home", "トップに表示する")
+  != $_check_box($event, "show_at_home", ["checked"=>$event->is_auto_draft()])
+%p
+  != $_label_for($event, "scheduled_on", "日時")
+  %input(type="text" id="event_scheduled_on" name="event[scheduled_on]" value="#{$event->scheduled_on}")

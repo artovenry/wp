@@ -5,67 +5,58 @@ class MetaBox{
   static function init($class){
     if(empty($class::$meta_box_options))return [];
     $meta_boxes= [];
-    foreach($class::$meta_box_options as $attr=>$options)
-      $meta_boxes[]= new self($class, $attr, $options);
+    foreach($class::$meta_box_options as $name=>$options)
+      $meta_boxes[]= new self($class, $name, $options);
     return $meta_boxes;
   }
-  private function __construct($class, $attr, $options=[]){
-    extract($class::$meta_box_options[$attr]);
-    $this->name= join("_", [Constants::PREFIX, $class::$post_type, $attr]);
+  private function __construct($class, $name, $options=[]){
+    extract($class::$meta_box_options[$name]);
+    $this->name= $name;
     $this->label= $label;
     $this->context= empty($context)? Constants::DEFAULT_META_BOX_CONTEXT: $context;
     $this->priority= empty($priority)? Constants::DEFAULT_META_BOX_PRIORITY: $priority;
-    $this->attribute= $attr;
     $this->post_type= $class::$post_type;
     $this->class= $class;
     $this->template= isset($template)? $template: null;
+    $this->args= isset($options["args"])? (array)$options["args"]: [];
   }
 
   function render($post, $args=[]){
     \Artovenry\Haml::run($this->view_path());
     extract(Helper::helpers());
-    echo $_nonce_field_for($this->name, $this->nonce_key());
+    echo $_nonce_field_for($this->nonce_key(), $this->name);
+
     $class= $this->class;
     $post= $class::build($post);
     $post_type= $this->post_type;
-    $attr= $this->attribute;
-    $value= $post->$attr;
+
     $args=array_merge([
       "post_type"=>$post_type,
       $post_type=>$post,
-      $attr=>$value,
-      //"name"=>$this->name
-      // eg: name="event[show_on_top]"
-      "name"=>"{$post_type}[{$attr}]"
     ], $args);
     render_template($this->template(), $args);
   }
 
   function register(){
-    add_meta_box($this->name, $this->label, [$this, "render"], get_current_screen(), $this->context, $this->priority);
+    add_meta_box($this->prefixed_name(), $this->label, [$this, "render"], get_current_screen(), $this->context, $this->priority, $this->args);
   }
 
-  function after_save($post_id, $post, $updated){
-    if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return false;
-    if(!current_user_can("edit_post", $post_id)) return false;
-    if(!wp_verify_nonce($_POST[$this->nonce_key()], $this->name)) return false;
+  private function prefixed_name(){
     $class= $this->class;
-    $posted_value= $_POST[$post->post_type][$this->attribute];
-    if(!empty($value= $posted_value))
-      $class::build($post)->set_meta($this->attribute, $value);
-    else
-      $class::build($post)->delete_meta($this->attribute);
+    $post_type= $this->post_type;
+    return join("_", [Constants::PREFIX, $class::$post_type, $this->name]);
   }
 
   private function template(){
     if(empty($this->template))
-      return $this->post_type . "/" . $this->attribute;
+      return $this->post_type . "/" . $this->name;
     return $this->template;
   }
   private function view_path(){
     return defined("ART_VIEW")? ART_VIEW . "/meta_boxes" : "meta_boxes";
   }
-  private function nonce_key(){
-    return "_nonce_" . $this->name;
+
+  function nonce_key(){
+    return "_nonce_" . $this->prefixed_name();
   }
 }

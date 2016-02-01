@@ -1,20 +1,13 @@
 <?
 namespace Artovenry\Wp\CustomPost;
+
 class FormHelper extends \Artovenry\ViewHelper{
 	function radio_button($args){
 		$attributes= call_user_func_array([$this,"attributes_for_check_fields"], func_get_args());
 		$attributes= $this->element_attributes_for($attributes);
 		return sprintf('<input type="radio" %s />', join(" ", $attributes));
 	}
-	function check_box($args){
-		$default_checked_value= "1";
-		$default_unchecked_value= "0";
-		$args= func_get_args();
-		$record= array_shift($args);
-		$attribute= array_shift($args);
-		$unchecked_value= array_pop($args);
-		$checked_value= array_pop($args);
-		$options= (array)array_pop($args);
+	function check_box($record, $attribute, $options=[], $checked_value="1", $unchecked_value="0"){
 
 		$value_for_check_box= isset($checked_value)? $checked_value: "1";
 		$value_for_hidden= isset($unchecked_value)? $unchecked_value: "0";
@@ -30,6 +23,11 @@ class FormHelper extends \Artovenry\ViewHelper{
 		$hidden= sprintf('<input type="hidden" name="%s" value="%s" />', $name , $value_for_hidden);
 		return $hidden . $check_box;
 	}
+	function label_for($record, $attribute, $label){
+		if(!($record instanceof Base))throw new RecordNotCustomPost;
+		return sprintf('<label for="%s">%s</label>', "{$record->post_type}_{$attribute}", $label);
+	}
+
 
 	private function element_attributes_for($hash){
 		$str=[];
@@ -45,11 +43,13 @@ class FormHelper extends \Artovenry\ViewHelper{
 		list($record, $attribute, $value)= $args;
 		$options= array_pop($args);
 
+		if(!($record instanceof Base))throw new RecordNotCustomPost;
+
 		$name= empty($options["name"])? "{$record->post_type}[{$attribute}]": $options["name"];
 		$id= empty($options["id"])? "{$record->post_type}_{$attribute}_{$value}": $options["id"];
 		$class= empty($options["class"])? null: $options["class"];
 		$checked= ($record->$attribute === $value)? "checked": null;
-		if(!empty($options["checked"]))$checked= $options["checked"];
+		if(!empty($options["checked"]))$checked= "checked";
 
 		return compact( "name", "id", "value", "class", "checked");
 	}

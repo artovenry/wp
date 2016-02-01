@@ -1,19 +1,21 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-require __DIR__ . "/Error.php";
+require_once __DIR__ . "/Error.php";
 
 abstract class Base{
   use Query;
   use PostMeta;
   use Route;
+  use Callback;
   private $post;
   private $post_id;
 
   function __get($name){
     if($name==="post")return $this->post;
     if($name==="post_id")return $this->post_id;
-    foreach(static::$meta_attrs as $attr)
-      if($name === $attr)return $this->get_meta($attr);
+    if(is_array(static::$meta_attrs))
+      foreach(static::$meta_attrs as $attr)
+        if($name === $attr)return $this->get_meta($attr);
     return $this->post->$name;
   }
 
@@ -32,17 +34,6 @@ abstract class Base{
     static::register_routes();
   }
 
-  private static function register_callbacks($meta_boxes){
-    add_action("save_post_" . static::$post_type, function($post_id, $post, $updated)use($meta_boxes){
-      if(is_array($meta_boxes))
-        foreach($meta_boxes as $item)$item->after_save($post_id, $post, $updated);
-      static::after_save($post_id, $post, $updated);
-    }, 10, 3);
-    add_filter("wp_insert_post_data", function($data, $postarr){
-      if(static::$post_type !== $data["post_type"])return $data;
-      return static::before_save($data, $postarr);
-    },10,2);
-  }
   private static function register_post_type($meta_boxes){
     $options= static::$post_type_options;
     if(empty($options))$options= [];
@@ -63,6 +54,4 @@ abstract class Base{
     $this->post_id= is_int($p)? $p: $p->ID;
   }
 
-  static function after_save($post_id, $post, $updated){}//NOOP
-  static function before_save($data, $postarr){return $data;}//NOOP
 }

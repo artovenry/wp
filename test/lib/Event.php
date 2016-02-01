@@ -8,19 +8,12 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
   ];
   static $meta_attrs= ["show_at_home", "scheduled_on", "hoge"];
   static $meta_box_options=[
-    "show_at_home"=> [
-      "label"=> "トップページに表示",
-      "template"=>"show_at_home"
-    ],
-    "scheduled_on"=> [
-      "label"=> "日時"
+    "option"=>[
+      "label"=>"設定",
     ],
     "hoge"=>[
       "label"=>"hhhh",
       "template"=>"boge"
     ]
   ];
-
-  //static function after_save($post_id, $post, $updated){
-  //}
 }

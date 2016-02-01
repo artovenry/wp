@@ -46,6 +46,10 @@ class TestHelper extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 			'<input type="hidden" name="event[show_at_home]" value="0" />' .
 			'<input type="checkbox" name="event[show_at_home]" id="event_show_at_home" value="1" />'
 		);
+		$this->assertEquals($_check_box($event, "show_at_home", ["checked"=>"checked"]),
+			'<input type="hidden" name="event[show_at_home]" value="0" />' .
+			'<input type="checkbox" name="event[show_at_home]" id="event_show_at_home" value="1" checked="checked" />'
+		);
 		$this->assertEquals($_check_box($event, "hoge", [], "yes", "no"),
 			'<input type="hidden" name="event[hoge]" value="no" />' .
 			'<input type="checkbox" name="event[hoge]" id="event_hoge" value="yes" checked="checked" />'
