@@ -3,6 +3,9 @@ namespace Artovenry\Wp\CustomPost;
 
 trait PostMeta{
   function create_or_update_meta($attr, $value){
+    if(!is_bool($value) AND !is_string($value) AND !is_numeric($value))
+      throw new TypeIsNotScalar;
+    $value= (string) $value;
     update_post_meta($this->post_id, static::meta_key_for($attr), $value);
   }
   function delete_meta($attr){
@@ -10,7 +13,6 @@ trait PostMeta{
   }
   function get_meta($attr){
     return get_post_meta($this->post_id, static::meta_key_for($attr), true);
-
   }
 
   function set_meta($attr, $value){

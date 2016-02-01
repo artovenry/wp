@@ -1,40 +1,34 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-
-//TODO: consider for various injection attacks!
-//TODO: define collection_check_boxes
 class FormHelper extends \Artovenry\ViewHelper{
-
-/*
-	static function apply($record, $name, $args){
-		array_unshift($args, $record);
-		$helpers= static::helpers();
-		foreach($helpers as $key=>$helper)
-			if($key === "_{$name}")
-				return call_user_func_array($helper, $args);
-	}
-*/
-
 	function radio_button($args){
 		$attributes= call_user_func_array([$this,"attributes_for_check_fields"], func_get_args());
-		$attributes= $this->element_attributes_for($attributes);		
+		$attributes= $this->element_attributes_for($attributes);
 		return sprintf('<input type="radio" %s />', join(" ", $attributes));
 	}
-
-
-
 	function check_box($args){
+		$default_checked_value= "1";
+		$default_unchecked_value= "0";
 		$args= func_get_args();
 		$record= array_shift($args);
 		$attribute= array_shift($args);
 		$unchecked_value= array_pop($args);
 		$checked_value= array_pop($args);
-		$options= array_pop($args);
+		$options= (array)array_pop($args);
 
-		$attributes= call_user_func_array([$this,"attributes_for_check_fields"], func_get_args());
+		$value_for_check_box= isset($checked_value)? $checked_value: "1";
+		$value_for_hidden= isset($unchecked_value)? $unchecked_value: "0";
+
+		$attributes= call_user_func_array([$this,"attributes_for_check_fields"], [$record, $attribute, $value_for_check_box, $options]);
+		if(empty($options["id"]))
+			$attributes["id"]= "{$record->post_type}_{$attribute}";
+
 		$attributes= $this->element_attributes_for($attributes);
-		$attributes["name"]= "{$attributes["name"]}[]";
-		return sprintf('<input type="checkbox" %s />', join(" ", $attributes));
+		$check_box= sprintf('<input type="checkbox" %s />', join(" ", $attributes));
+
+		$name= empty($options["name"])? "{$record->post_type}[{$attribute}]": $options["name"];
+		$hidden= sprintf('<input type="hidden" name="%s" value="%s" />', $name , $value_for_hidden);
+		return $hidden . $check_box;
 	}
 
 	private function element_attributes_for($hash){

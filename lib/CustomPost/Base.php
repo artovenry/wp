@@ -1,5 +1,6 @@
 <?
 namespace Artovenry\Wp\CustomPost;
+require __DIR__ . "/Error.php";
 
 abstract class Base{
   use Query;
