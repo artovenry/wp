@@ -1,4 +1,19 @@
 <?
+class Logger{
+  static function start(){
+    add_filter("query", __CLASS__ . "::log");
+  }
+
+  static function finish(){
+    remove_filter("query",  __CLASS__ . "::log");
+  }
+
+  static function log($sql){
+    echo "\n\n{$sql}\n\n";
+    return $sql;
+  }
+}
+
 class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 
   function setUp(){
@@ -34,10 +49,16 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $this->assertEquals("publish", $first_info->post_status);
     $first_info->set_meta("show_at_home", true);
 
-    $this->assertCount(1, Test\Info::all("show_at_home=1"));
+    $this->assertCount(1, Test\Info::all("meta_key=show_at_home&meta_value=1"));
 
     $rs=[];
-    foreach(Test\Info::where("show_at_home=1") as $info)
+    $query=[
+      "meta_query"=>[
+        ["key"=>"show_at_home","value"=>"1"]
+      ]
+    ];
+
+    foreach(Test\Info::where($query) as $info)
       $rs[]= $info->show_at_home;
     $this->assertCount(1, $rs);
     $this->assertEquals("1", $rs[0]);
@@ -68,8 +89,8 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
       "scheduled_on"=>"2016-01-04"
     ]);
     $events= Test\Event::all([
-      "orderby"=>"scheduled_on",
-      "order"=>"desc"
+     "orderby"=>["meta_value"=>"desc"],
+     "meta_key"=>"scheduled_on"
     ]);
     $this->assertEquals("hoge-3", $events[0]->hoge);
     $this->assertEquals("hoge-5", $events[1]->hoge);
@@ -77,10 +98,7 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $this->assertEquals("hoge-4", $events[3]->hoge);
     $this->assertEquals("hoge-1", $events[4]->hoge);
 
-    $events= Test\Event::all([
-      "orderby"=>"scheduled_on",
-      "order"=>"asc"
-    ]);
+    $events= Test\Event::all("orderby=meta_value&order=asc&meta_key=scheduled_on");
     $this->assertEquals("hoge-1", $events[0]->hoge);
     $this->assertEquals("hoge-4", $events[1]->hoge);
     $this->assertEquals("hoge-2", $events[2]->hoge);
@@ -93,7 +111,7 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
   function test_complex_order_query(){
     $events = Test\Event::take(5);
     $events[0]->set_meta([
-      "hoge"=>true,
+      "hoge"=>"HOGEHOGE",
       "scheduled_on"=>"2016-01-01"
     ]);
     $events[1]->set_meta([
@@ -105,46 +123,26 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
       "scheduled_on"=>"2016-01-05"
     ]);
     $events[3]->set_meta([
-      "hoge"=>true,
+      "hoge"=>"HOGEHOGE",
       "scheduled_on"=>"2016-01-02"
     ]);
     $events[4]->set_meta([
-      "hoge"=>true,
+      "hoge"=>"HOGEHOGE",
       "scheduled_on"=>"2016-01-04"
     ]);
+
+    Logger::start();
     $events= Test\Event::take(2, [
-      "hoge"=>true,
-      "orderby"=>"scheduled_on",
-      "order"=>"desc"
-    ]);
-/*    $events= Test\Event::take(2, [
-      "orderby"=>"meta_value",
-      "order"=>"desc",
+      "orderby"=>["meta_value"=>"desc"],
+      "meta_key"=>"scheduled_on",
+      "meta_type"=>"DATE",
       "meta_query"=>[
-        //["key"=>"art_event_hoge", "meta_value"=>true],
-        ["key"=>"art_event_scheduled_on"],
-      ]
+        ["key"=>"hoge","value"=>"HOGEHOGE"]
+      ],
     ]);
-*/
+    Logger::finish();
     $this->assertCount(2, $events);
     $this->assertEquals("2016-01-04", $events[0]->scheduled_on);
     $this->assertEquals("2016-01-02", $events[1]->scheduled_on);
   }
 }
-
-
-__halt_compiler();
------------------------------------
-[
-  "show_at_home"=>true,
-  "orderby"=>"scheduled_on"
-]
-
-
-[
-  "order_by"=>"meta_value"
-  "meta_query"=>[
-    ""
-  ]
-]
-

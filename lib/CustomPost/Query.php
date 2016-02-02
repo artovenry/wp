@@ -3,12 +3,12 @@ namespace Artovenry\Wp\CustomPost;
 
 trait Query{
   static function all($args=[]){
-    $args= array_merge(["posts_per_page"=> -1],static::parse_args($args));
+    $args= array_merge(["posts_per_page"=> -1],static::parse_query($args));
     return static::fetch($args);
   }
 
   static function where($args=[]){
-    $posts= get_posts(static::parse_args($args));
+    $posts= get_posts(static::parse_query($args));
     foreach($posts as $item)
       yield static::build($item);
   }
@@ -21,7 +21,7 @@ trait Query{
   */
   static function take($limit_or_args=1, $args=[]){
     if(!is_int($limit_or_args)){
-      $args= array_merge(static::parse_args($limit_or_args), ["posts_per_page"=>1]);
+      $args= array_merge(static::parse_query($limit_or_args), ["posts_per_page"=>1]);
     }else{
       $args= array_merge($args,["posts_per_page"=>$limit_or_args]);
     }
@@ -35,36 +35,33 @@ trait Query{
       $rs[]= $item;
     return $rs;
   }
-  private static function parse_args($args){
-    $args= wp_parse_args($args,[
+
+  private static function parse_query($query){
+    $defaults=[
       "post_type"=>static::$post_type
-    ]);
-    $args= static::build_orderby_query($args);
-    $rs=[];
-    foreach($args as $key=>$value){
-      if(!static::is_attr_defined($key)){
-        $rs[$key]= $value;
-      }else{
-        $meta= [
-          "key"=>static::meta_key_for($key),
-          "value"=>$value
-        ];
-      }
-    }
-    if(!empty($meta)){
-      $rs["meta_key"]= $meta["key"];
-      $rs["meta_value"]= $meta["value"];    
-    }
-    return $rs;
+    ];
+    $query= wp_parse_args($query, $defaults);
+    return static::parse_meta_query($query);
   }
 
-  private static function build_orderby_query($args){
-    if(empty($args["orderby"]))return $args;
-    $orderby= $args["orderby"];
-    if(!is_string($orderby))return $args;
-    if(!static::is_attr_defined($orderby))return $args;
-    $args["orderby"]= "meta_value";
-    $args["meta_key"]= static::meta_key_for($orderby);
-    return $args;
+  private static function parse_meta_query($query){
+    $convert= function($attr){
+      if(!static::is_attr_defined($attr))return $attr;
+      return static::meta_key_for($attr);
+    };
+
+    if(!empty($query["meta_key"]))
+      $query["meta_key"]= $convert($query["meta_key"]);
+
+    if(!empty($query["meta_query"])){
+      $meta_query= &$query["meta_query"];
+      if(!is_array($meta_query))return $query;
+      foreach($meta_query as &$item){
+        if(!is_array($item))continue;
+        if(empty($item["key"]))continue;
+        $item["key"]= $convert($item["key"]);
+      }
+    }
+    return $query;
   }
 }

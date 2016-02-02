@@ -55,7 +55,7 @@ abstract class Base{
   }
 
 
-  private static function is_attr_defined($attr, $raise= false){
+  static function is_attr_defined($attr, $raise= false){
     $meta_attrs= isset(static::$meta_attrs)? static::$meta_attrs: [];
     foreach($meta_attrs as $item)
       if($item === $attr)return true;
