@@ -2,6 +2,7 @@
 use Artovenry\Wp\CustomPost\FormHelper;
 class TestHelper extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 	function setUp(){
+		parent::setUp();
 		$this->create_post("event", 1);
 		$event= Test\Event::take();
 		$event->set_meta("show_at_home", "0");

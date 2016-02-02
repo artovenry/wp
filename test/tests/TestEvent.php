@@ -5,6 +5,7 @@ class TestEvent extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
   function test_noop(){}
 
   function setUp(){
+    parent::setUp();
     $this->create_post("event", 10);
   }
   function test_sample(){
@@ -20,6 +21,5 @@ class TestEvent extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $event->set_meta("show_at_home", "yes");
     $this->assertEquals($event->show_at_home, "yes");
   }
-
 }
 

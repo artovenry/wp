@@ -54,4 +54,17 @@ abstract class Base{
     $this->post_id= is_int($p)? $p: $p->ID;
   }
 
+
+  private static function is_attr_defined($attr, $raise= false){
+    $meta_attrs= isset(static::$meta_attrs)? static::$meta_attrs: [];
+    foreach($meta_attrs as $item)
+      if($item === $attr)return true;
+    if($raise)throw new AttributeNotDefined($attr);
+    return false;
+  }
+
+  static function meta_key_for($attr){
+    return Constants::PREFIX . "_" . static::$post_type . "_" . $attr;
+  }
+
 }

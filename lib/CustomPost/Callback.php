@@ -3,7 +3,7 @@ namespace Artovenry\Wp\CustomPost;
 require_once __DIR__ . "/Error.php";
 
 trait Callback{
-  private static function register_callbacks($meta_boxes){
+  static function register_callbacks($meta_boxes){
     add_action("save_post_" . static::$post_type, function($post_id, $post, $updated) use($meta_boxes){
       if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return false;
       try{
@@ -42,7 +42,3 @@ trait Callback{
   static function after_save($post){}//NOOP
   static function before_save($data, $postarr){return $data;}//NOOP
 }
-
-
-
-//_nonce_art_event_option 698de2a1af

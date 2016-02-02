@@ -1,25 +1,34 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-
+require_once __DIR__ . "/Error.php";
 trait PostMeta{
   function create_or_update_meta($attr, $value){
     if(!is_bool($value) AND !is_string($value) AND !is_numeric($value))
       throw new TypeIsNotScalar;
     $value= (string) $value;
-    update_post_meta($this->post_id, static::meta_key_for($attr), $value);
+    if(static::is_attr_defined($attr, true))
+      update_post_meta($this->post_id, static::meta_key_for($attr), $value);
   }
+
   function delete_meta($attr){
-    delete_post_meta($this->post_id, static::meta_key_for($attr));
+    if(static::is_attr_defined($attr, true))
+      delete_post_meta($this->post_id, static::meta_key_for($attr));
   }
   function get_meta($attr){
-    return get_post_meta($this->post_id, static::meta_key_for($attr), true);
+    if(static::is_attr_defined($attr, true)){
+      $value= get_post_meta($this->post_id, static::meta_key_for($attr), true);
+      if($value === "")return null;
+      return $value;
+    }
   }
 
-  function set_meta($attr, $value){
-    $this->create_or_update_meta($attr, $value);
-  }
-
-  private static function meta_key_for($attr){
-    return Constants::PREFIX . "_" . static::$post_type . "_" . $attr;
+  function set_meta(){
+    $args= func_get_args();
+    $attr_or_hash= array_shift($args);
+    if(is_string($attr_or_hash))
+      $this->create_or_update_meta($attr_or_hash, array_shift($args));
+    else
+      foreach($attr_or_hash as $attr=>$value)
+        $this->create_or_update_meta($attr, $value);
   }
 }
