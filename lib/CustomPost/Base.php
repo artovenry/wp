@@ -32,9 +32,10 @@ abstract class Base{
     static::register_post_type($meta_boxes);
     static::register_callbacks($meta_boxes);
     static::register_routes();
+    PostsListTable::init(get_called_class());
   }
 
-  private static function register_post_type($meta_boxes){
+  protected static function register_post_type($meta_boxes){
     $options= static::$post_type_options;
     if(empty($options))$options= [];
     if(empty($options["label"])) $options["label"]= static::$post_type;

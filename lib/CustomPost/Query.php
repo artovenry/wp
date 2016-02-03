@@ -1,7 +1,14 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-
+require_once __DIR__ . "/Error.php";
 trait Query{
+  static function find($id, $raise= true){
+    if($post= get_post($id))
+      return static::build($post);
+    if($raise) throw new RecordNotFound;
+    return false;
+  }
+
   static function all($args=[]){
     $args= array_merge(["posts_per_page"=> -1],static::parse_query($args));
     return static::fetch($args);

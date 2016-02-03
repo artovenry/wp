@@ -4,3 +4,4 @@ define("ART_ENV", "development");
 define("ART_VIEW", __DIR__);
 Test\Event::register();
 Test\Info::register();
+Test\Blog::register();
