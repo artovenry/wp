@@ -145,4 +145,11 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $this->assertEquals("2016-01-04", $events[0]->scheduled_on);
     $this->assertEquals("2016-01-02", $events[1]->scheduled_on);
   }
+
+  function _test_simplified_meta_query(){
+    $event= Test\Event::take();
+    $event->set_meta("hoge", "SIMPLE");
+    $event= Test\Event::take(["meta_query"=>["key"=>"hoge", "value"=>"SIMPLE"]]);
+    $this->assertEquals("SIMPLE", $event->hoge);
+  }
 }

@@ -27,8 +27,9 @@ class FormHelper extends \Artovenry\ViewHelper{
 		if(!($record instanceof Base))throw new RecordNotCustomPost;
 		return sprintf('<label for="%s">%s</label>', "{$record->post_type}_{$attribute}", $label);
 	}
-
-
+	function nonce_field_for($action, $key){
+		return wp_nonce_field($action,$key, true, false);
+	}
 	private function element_attributes_for($hash){
 		$str=[];
 		foreach($hash as $key=>$value){

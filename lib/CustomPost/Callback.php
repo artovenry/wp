@@ -6,21 +6,23 @@ trait Callback{
   static function register_callbacks($meta_boxes){
     add_action("save_post_" . static::$post_type, function($post_id, $post, $updated) use($meta_boxes){
       if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return false;
-      try{
-        static::authorize($post_id, $meta_boxes);
-      }catch(RequestNotAuthenticated $e){
-        if(defined("ART_ENV") and (ART_ENV === "development"))throw $e;
-        return false;
-      }
+      if(!empty($_POST)){
+        try{
+          static::authorize($post_id, $meta_boxes);
+        }catch(RequestNotAuthenticated $e){
+          if(defined("ART_ENV") and (ART_ENV === "development"))throw $e;
+          return false;
+        }
 
-      $post= static::build($post);
-      if($post->is_auto_draft())return;
-      $params= $_POST[static::$post_type];
-      foreach(static::$meta_attrs as $attr){
-        if(empty($params[$attr]))
-          $post->delete_meta($attr);
-        else
-          $post->set_meta($attr, $params[$attr]);
+        $post= static::build($post);
+        if($post->is_auto_draft())return;
+        $params= $_POST[static::$post_type];
+        foreach(static::$meta_attrs as $attr){
+          if(empty($params[$attr]))
+            $post->delete_meta($attr);
+          else
+            $post->set_meta($attr, $params[$attr]);
+        }
       }
       static::after_save($post);
     }, 10, 3);
@@ -33,7 +35,6 @@ trait Callback{
   static function authorize($post_id, $meta_boxes){
     if(!current_user_can("edit_post", $post_id)) throw new RequestNotAuthenticated;
     if(!is_user_logged_in()) throw new RequestNotAuthenticated;
-    if(empty($_POST))return;
     foreach($meta_boxes as $item){
       if(!wp_verify_nonce($_POST[$item->name], $item->nonce_key())) throw new RequestNotAuthenticated;
     }

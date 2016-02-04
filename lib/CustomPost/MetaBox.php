@@ -22,10 +22,8 @@ class MetaBox{
   }
 
   function render($post, $args=[]){
-    \Artovenry\Haml::run($this->view_path());
-    extract(Helper::helpers());
-    echo $_nonce_field_for($this->nonce_key(), $this->name);
-
+    \Artovenry\Haml::run($this->view_path(), ["helpers"=>["Artovenry\\Wp\\CustomPost\\FormHelper"]]);
+    echo wp_nonce_field($this->nonce_key(),$this->name, true, false);
     $class= $this->class;
     $post= $class::build($post);
     $post_type= $this->post_type;

@@ -8,7 +8,7 @@
         }
     ],
     "require": {
-        "artovenry/haml": "1.0.0",
+        "artovenry/haml": "2.0.0",
         "artovenry/view_helper": "1.0.0",
         "symfony/yaml": "^2.7.5"
     },
