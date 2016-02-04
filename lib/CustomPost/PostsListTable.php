@@ -45,7 +45,7 @@ class PostsListTable{
 	}
 
 	function register_columns($default_columns){
-		$columns= $this->columns();
+		if(empty($columns= $this->columns()))return $default_columns;
 		foreach($default_columns as $key=>$value)
 			if(array_key_exists($key, $columns))
 				$columns[$key]= $value;
