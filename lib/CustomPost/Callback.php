@@ -17,7 +17,7 @@ trait Callback{
         $post= static::build($post);
         if($post->is_auto_draft())return;
         $params= $_POST[static::$post_type];
-        if(!is_array(static::$meta_attrs))return;
+        if(!isset(static::$meta_attrs) or !is_array(static::$meta_attrs))return;
         foreach(static::$meta_attrs as $attr){
           if(empty($params[$attr]))
             $post->delete_meta($attr);
