@@ -66,7 +66,7 @@ class PostsListTable{
 		if($class::is_attr_defined($column_name))
 			echo $record->get_meta($column_name);
 	}
-	function __construct($class, $options){
+	function __construct($class, $options=[]){
 		$this->class= $class;
 		$this->post_type= $class::$post_type;
 		if(isset($options["columns"]))
@@ -75,6 +75,7 @@ class PostsListTable{
 			$this->order= $options["order"];
 	}
 	static function init($custom_post_class){
+		$options= [];
 		if(isset($custom_post_class::$posts_list_options))
 			$options= $custom_post_class::$posts_list_options;
 		if(is_callable("{$custom_post_class}::posts_list_options"))
