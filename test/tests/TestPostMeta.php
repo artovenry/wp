@@ -1,18 +1,5 @@
 <?
-class Logger{
-  static function start(){
-    add_filter("query", __CLASS__ . "::log");
-  }
-
-  static function finish(){
-    remove_filter("query",  __CLASS__ . "::log");
-  }
-
-  static function log($sql){
-    echo "\n\n{$sql}\n\n";
-    return $sql;
-  }
-}
+use Artovenry\Wp\Logger;
 
 class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 

@@ -15,12 +15,11 @@
     },
     "autoload":{
       "psr-4":{
-        "Artovenry\\Wp\\": ["lib/"]
+        "": ["lib/"]
       }
     },
     "autoload-dev":{
       "psr-4":{
-        "Artovenry\\Wp\\": ["lib/"],
         "Test\\": ["test/lib/"]
       }
     }
