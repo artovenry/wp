@@ -10,7 +10,8 @@ class PostsListTable{
 	private $columns;
 	private $order;
 
-	function columns(){
+	function build_columns(){
+		if(empty($this->order))return false;
 		$columns= array_filter($this->order, function($item){
 			return in_array($item, array_merge($this->built_in_columns(), $this->column_names()));
 		});
@@ -45,7 +46,7 @@ class PostsListTable{
 	}
 
 	function register_columns($default_columns){
-		if(empty($columns= $this->columns()))return $default_columns;
+		if(empty($columns= $this->build_columns()))return $default_columns;
 		foreach($default_columns as $key=>$value)
 			if(array_key_exists($key, $columns))
 				$columns[$key]= $value;
