@@ -2,22 +2,28 @@
 namespace Test;
 
 class Event extends \Artovenry\Wp\CustomPost\Base{
-  static $post_type= "event";
-  static $post_type_options=[
-    "label"=>"ライブ",
-    "taxonomies"=>["products"]
-  ];
-  static $meta_attrs= ["show_at_home", "scheduled_on", "hoge"];
-  static $meta_box_options=[
-    "option"=>[
-      "label"=>"設定",
-    ],
-    "hoge"=>[
-      "label"=>"hhhh",
-      "template"=>"boge"
-    ]
+  //hash or function or string
+  static $post_type=[
+    "name"=>    "event",
+    "label"=>   "ライブ",
   ];
 
+  //array or function
+  static $meta_attributes= ["show_at_home", "scheduled_on", "hoge"];
+
+  //array or function
+  static $meta_boxes=[
+    [
+      "name"=>    "option",
+      "label"=>   "設定",
+    ],
+    [
+      "name"=>    "hoge",
+      "template"=>   "boge"
+    ],
+  ];
+
+  //hash or function
   static function posts_list_options(){
     return[
       "order"=>["show_at_home", "title","taxonomy-products", "scheduled_on", "date", "some_column"],
@@ -29,18 +35,5 @@ class Event extends \Artovenry\Wp\CustomPost\Base{
         "some_column"=>["label"=>"SOME COLUMN"]
       ]
     ];
-  }
-
-
-  static function register_post_type($meta_boxes){
-    parent::register_post_type($meta_boxes);
-    $rs= register_taxonomy('products', 'event', [
-      'hierarchical' => true, 
-      'label' => '製品のカテゴリー',
-      'singular_label' => '製品のカテゴリー',
-      'public' => true,
-      "show_admin_column"=>true,
-      'show_ui' => true
-    ]);
   }
 }

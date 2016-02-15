@@ -2,59 +2,46 @@
 namespace Artovenry\Wp\CustomPost;
 
 class MetaBox{
-  static function init($class){
-    if(empty($class::$meta_box_options))return [];
-    $meta_boxes= [];
-    foreach($class::$meta_box_options as $name=>$options)
-      $meta_boxes[]= new self($class, $name, $options);
-    return $meta_boxes;
-  }
-  private function __construct($class, $name, $options=[]){
-    extract($class::$meta_box_options[$name]);
-    $this->name= $name;
-    $this->label= $label;
-    $this->context= empty($context)? Constants::DEFAULT_META_BOX_CONTEXT: $context;
-    $this->priority= empty($priority)? Constants::DEFAULT_META_BOX_PRIORITY: $priority;
-    $this->post_type= $class::$post_type;
-    $this->class= $class;
-    $this->template= isset($template)? $template: null;
-    $this->args= isset($options["args"])? (array)$options["args"]: [];
-  }
+  const CONTEXT= "side";
+  const PRIORITY= "core";
+  const PREFIX= "art";
+  const VIEWPATH= "meta_boxes";
 
-  function render($post, $args=[]){
-    \Artovenry\Haml::run($this->view_path(), ["helpers"=>["Artovenry\\Wp\\CustomPost\\FormHelper"]]);
-    echo wp_nonce_field($this->nonce_key(),$this->name, true, false);
-    $class= $this->class;
-    $post= $class::build($post);
-    $post_type= $this->post_type;
+  private $post_type_class;
+  private $post_type;
+  private $prefixed_name;
+  private $options;
 
-    $args=array_merge([
-      "post_type"=>$post_type,
-      $post_type=>$post,
-    ], $args);
-    render_template($this->template(), $args);
+  function __construct($post_type_class, $options){
+    $this->post_type_class= $post_type_class;
+    $this->post_type= $post_type_class::post_type();
+    $this->prefixed_name= join("_", [self::PREFIX, $this->post_type, $options["name"]); 
+    if(!isset($options["label"]))
+      $options["label"]= $options["name"];
+    if(isset($options["args"]))
+      $options["args"]= (array)$options["args"];
+    if(!isset($options["template"]))
+
+    $this->options= array_merge([
+      "context"=> self::CONTEXT,
+      "priority"=> self::PRIORITY,
+      "args"=> [],
+      "template"=> join("/", [$this->post_type, $this->name]),
+    ], $options);
+
   }
-
   function register(){
-    add_meta_box($this->prefixed_name(), $this->label, [$this, "render"], get_current_screen(), $this->context, $this->priority, $this->args);
+    extract($this->options);
+    add_meta_box($this->prefixed_name, $label,[$this, "render"], get_current_screen(), $context, $priority, $args);
   }
-
-  private function prefixed_name(){
-    $class= $this->class;
+  function render($post, $args){
+    extract($this->options);
+    $class= $this->post_type_class;
     $post_type= $this->post_type;
-    return join("_", [Constants::PREFIX, $class::$post_type, $this->name]);
-  }
-
-  private function template(){
-    if(empty($this->template))
-      return $this->post_type . "/" . $this->name;
-    return $this->template;
-  }
-  private function view_path(){
-    return defined("ART_VIEW")? ART_VIEW . "/meta_boxes" : "meta_boxes";
-  }
-
-  function nonce_key(){
-    return "_nonce_" . $this->prefixed_name();
+    $locals= array_merge([
+      "post_type"=> $post_type,
+      $post_type=> $class::build($post),
+    ], $args);
+    Haml::render_box($template, $locals, $this->prefixed_name, $this->name);
   }
 }

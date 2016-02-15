@@ -2,16 +2,23 @@
 namespace Test;
 
 class Blog extends \Artovenry\Wp\CustomPost\Base{
-  static $post_type= "blog";
-  static $post_type_options=[
-    "label"=>"ぶろぐ"
+  static $post_type=[
+    "name"=>    "blog",
+    "label"=>   "ブログ",
   ];
-  static $meta_attrs= ["attr_a", "attr_b", "attr_c"];
 
-  static function meta_box_options(){
+  static $meta_attributes= ["attr_a", "attr_b", "attr_c"];
+
+  static function meta_boxes(){
     return [
-      "box_a"=>["label"=>"BOX_A"],
-      "box_b"=>["label"=>"BOX_B"],
+      [
+        "name"=>    "box_a",
+        "label"=>   "BOX_A",
+      ],
+      [
+        "name"=>    "box_b",
+        "label"=>   "BOX_B",
+      ],
     ];
   }
 

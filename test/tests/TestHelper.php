@@ -1,7 +1,7 @@
 <?
 use Artovenry\Wp\CustomPost\FormHelper;
 class TestHelper extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
-	function setUp(){
+	function _setUp(){
 		parent::setUp();
 		$this->create_post("event", 1);
 		$event= Test\Event::take();
@@ -9,8 +9,9 @@ class TestHelper extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 		$event->set_meta("scheduled_on", "sunday");
 		$event->set_meta("hoge", "yes");
 	}
+  function test_noop(){}
 
-	function test_check_boolean_expected_value(){
+	function _test_check_boolean_expected_value(){
 		$event= Test\Event::take();
 		$this->assertTrue(is_string($event->show_at_home));
 		$this->assertEquals($event->show_at_home, "0");
@@ -21,7 +22,7 @@ class TestHelper extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 
 	}
 
-	function test_radio_button(){
+	function _test_radio_button(){
 		extract(FormHelper::helpers());
 		$event= Test\Event::take();
 
@@ -39,7 +40,7 @@ class TestHelper extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 		);
 	}
 
-	function test_check_box(){
+	function _test_check_box(){
 		extract(FormHelper::helpers());
 		$event= Test\Event::take();
 

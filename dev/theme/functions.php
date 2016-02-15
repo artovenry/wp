@@ -2,13 +2,14 @@
 require dirname(dirname(__DIR__)) . "/vendor/autoload.php";
 define("ART_ENV", "development");
 define("ART_VIEW", __DIR__);
-Test\Event::register();
-Test\Info::register();
-Test\Blog::register();
-Artovenry\Wp\Dashboard::init([
+Test\Event::initialize();
+Test\Info::initialize();
+Test\Blog::initialize();
+
+/*Artovenry\Wp\Dashboard::init([
 	"update_notification"=> false,
 	"menu"=>[
 
 
 	]
-]);
+]);*/
