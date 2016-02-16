@@ -21,7 +21,6 @@ trait PostMeta{
       return $value;
     }
   }
-
   function set_meta(){
     $args= func_get_args();
     $attr_or_hash= array_shift($args);
@@ -30,5 +29,9 @@ trait PostMeta{
     else
       foreach($attr_or_hash as $attr=>$value)
         $this->create_or_update_meta($attr, $value);
+  }
+
+  static function meta_key_for($attr_name){
+    return join("_", [static::meta_prefix(), static::post_type(), $attr_name]);
   }
 }

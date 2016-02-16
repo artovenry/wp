@@ -10,7 +10,7 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
   }
   function test_noop(){}
 
-  function _test(){
+  function test(){
     $info= Test\Info::take();
     $this->assertTrue(null === $info->show_at_home);
     $info->set_meta("show_at_home", "1");
@@ -30,7 +30,7 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     }
   }
 
-  function _test_query(){
+  function test_query(){
     $infos= Test\Info::take(4);
     $first_info = $infos[0];
     $this->assertEquals("info", $first_info->post_type);
@@ -54,7 +54,7 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $this->assertEquals("info",Test\Info::take([])->post_type);
   }
 
-  function _test_order_query(){
+  function test_order_query(){
     $events = Test\Event::take(5);
     $events[0]->set_meta([
       "hoge"=>"hoge-1",
@@ -96,7 +96,7 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
   }
 
 
-  function _test_complex_order_query(){
+  function test_complex_order_query(){
     $events = Test\Event::take(5);
     $events[0]->set_meta([
       "hoge"=>"HOGEHOGE",
@@ -134,7 +134,7 @@ class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $this->assertEquals("2016-01-02", $events[1]->scheduled_on);
   }
 
-  function __test_simplified_meta_query(){
+  function test_simplified_meta_query(){
     $event= Test\Event::take();
     $event->set_meta("hoge", "SIMPLE");
     $event= Test\Event::take(["meta_query"=>["key"=>"hoge", "value"=>"SIMPLE"]]);

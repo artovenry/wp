@@ -1,15 +1,15 @@
 <?
 namespace Artovenry\Wp\CustomPost;
 
-class Haml extends \Artovenry\Haml{
+class Haml {
   static function initialize($viewpath){
     $viewpath= defined("ART_VIEW")? ART_VIEW . "/{$viewpath}" : $viewpath;
-    parent::initialize($viewpath, ["helpers"=>[
+    \Artovenry\Haml::initialize($viewpath, ["helpers"=>[
       'Artovenry\\Wp\\CustomPost\\Helper'
     ]]);
   }
-  static function render_box($template, $locals=[], $context, $name){
-    echo wp_nonce_field($context, $name, true, false);
-    static::render_template($template, $locals);
+  static function render_box($template, $locals=[], $nonce_key, $nonce_name){
+    echo wp_nonce_field($nonce_key, $nonce_name, true, false);
+    \Artovenry\Haml::renderer()->render_template($template, $locals);
   }
 }

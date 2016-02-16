@@ -38,10 +38,13 @@ module.exports= (grunt)->
   grunt.task.run 'notify_hooks'
 
   grunt.registerTask 'test',['shell:phpunit']
-  grunt.registerTask 'default', [
+  grunt.registerTask 'server', [
     'php:server'
     'configureProxies'
     'connect:front'
-    'test'
     'esteWatch'
+  ]
+  grunt.registerTask 'default', [
+    'server'
+    'test'
   ]
