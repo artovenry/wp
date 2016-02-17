@@ -1,0 +1,5 @@
+%ul
+	- foreach(Event::take(10) as $item)
+		%li
+			%p= h($item->post_title)
+			%p= $item->post_content

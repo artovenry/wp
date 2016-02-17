@@ -2,7 +2,7 @@
 namespace Test;
 
 class Info extends \Artovenry\Wp\CustomPost\Base{
-  static $post_type=[
+  static $post_type_options=[
     "name"=>    "info",
     "label"=>   "お知らせ",
   ];

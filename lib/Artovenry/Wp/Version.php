@@ -23,11 +23,14 @@ class Version{
     //add_action("template_redirect", function(){
     //  self::check();
     //});
+    //
     add_action("admin_init", function(){
       self::check();
     });
-
-
+    //AND, also check on after switch theme
+    add_action("after_switch_theme", function(){
+      self::check();
+    });
   }
 
   private static function check(){

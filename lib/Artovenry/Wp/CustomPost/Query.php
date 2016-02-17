@@ -45,7 +45,7 @@ trait Query{
 
   private static function parse_query($query){
     $defaults=[
-      "post_type"=>static::$post_type
+      "post_type"=>static::post_type()
     ];
     $query= wp_parse_args($query, $defaults);
     return static::parse_meta_query($query);

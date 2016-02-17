@@ -3,10 +3,12 @@ namespace Test;
 
 class Event extends \Artovenry\Wp\CustomPost\Base{
   //hash or function or string
-  static $post_type=[
-    "name"=>    "event",
-    "label"=>   "ライブ",
-  ];
+  static function post_type_options(){
+    return [
+      "name"=>    "event",
+      "label"=>   "ライブ",
+    ];
+  }
 
   //array or function
   static $meta_attributes= ["show_at_home", "scheduled_on", "hoge"];

@@ -20,7 +20,6 @@ class Callback{
       }
       $this->persist_meta($post);
     }
-    $class= $this->post_type_class;
   }
 
   //private
