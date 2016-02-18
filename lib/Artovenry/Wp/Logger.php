@@ -11,7 +11,9 @@ class Logger{
   }
 
   static function log($sql){
-    echo "\n\n{$sql}\n\n";
+    //echo "{$sql}\n";
+    //error_log("\n{$sql}\n");
+    error_log("\n{$sql}\n", 3, TEMPLATEPATH . "/tmp/db.log");
     return $sql;
   }
 }
