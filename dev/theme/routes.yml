@@ -1,0 +1,13 @@
+routes:
+  events:
+    controller: EventWidgetController
+#    capability: staff
+    actions:
+      - [index]
+      - [create, [POST], {capability: hoge}]
+    routes:
+      "(?P<id>\d+)":
+        actions:
+          - [read]
+          - [update, [PUT]]
+          - [delete, [DELETE]]

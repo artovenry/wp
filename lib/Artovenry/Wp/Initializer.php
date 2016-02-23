@@ -52,6 +52,8 @@ class Initializer{
 				define("ART_DASHBOARD_WIDGETS", TEMPLATEPATH . "/dashboard_widgets");
 			if(!defined("ART_VERSION_YAML"))
 				define("ART_VERSION_YAML", TEMPLATEPATH . "/version.yml");
+			if(!defined("ART_ROUTES_YAML"))
+				define("ART_ROUTES_YAML", TEMPLATEPATH . "/routes.yml");
 		}
 		private function initialize_models(){
 			foreach(glob(ART_MODEL . "/*.php") as $filename){
@@ -64,8 +66,9 @@ class Initializer{
 			foreach(glob(ART_DASHBOARD_WIDGETS . "/*.php") as $filename){
 				$classname= pathinfo($filename)["filename"];
 				require_once $filename;
-				$classname::initialize();
 			}
+			if(is_readable(ART_ROUTES_YAML))
+				add_action("rest_api_init","\Artovenry\Wp\Route::initialize");
 		}
 		private function disable_update_notification(){
 	    foreach(["core", "plugins", "themes"] as $item)

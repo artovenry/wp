@@ -1,7 +1,6 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-
-class MetaBox{
+class MetaBox extends \Artovenry\Wp\AbstractMetaBox{
   const CONTEXT= "side";
   const PRIORITY= "core";
   const PREFIX= "art";
