@@ -61,14 +61,15 @@ trait Query{
       $query["meta_key"]= $convert($query["meta_key"]);
 
     if(!empty($query["meta_query"])){
+      if(!is_array($query["meta_query"]))return $query;
       $meta_query= &$query["meta_query"];
-      if(!is_array($meta_query))return $query;
-      foreach($meta_query as &$item){
-        if(!is_array($item))continue;
-        if(empty($item["key"]))continue;
-        $item["key"]= $convert($item["key"]);
-      }
+
+      array_walk_recursive($meta_query, function(&$item, $key) use($convert){
+        if($key == "key")
+          $item= $convert($item);
+      });
     }
+
     return $query;
   }
 }
