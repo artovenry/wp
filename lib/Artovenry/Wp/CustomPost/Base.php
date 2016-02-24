@@ -51,6 +51,16 @@ abstract class Base{
   function is_auto_draft(){
     return $this->post->post_status === "auto-draft";
   }
+  function to_a(){
+    $post= $this->post->to_array();
+    $post_meta= array_reduce(static::options_for("meta_attributes"), function($rs, $item){
+      $rs[$item]= $this->get_meta($item);
+      return $rs;
+    },[]);
+    return array_merge($post, $post_meta);
+  }
+  function to_array(){return $this->to_a();}
+
 
   //private
     private function __construct($post_or_post_id){

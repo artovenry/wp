@@ -1,6 +1,5 @@
 <?
 namespace Artovenry\Wp\Dashboard;
 
-abstract class WidgetController extends \Artovenry\Wp\RestController{
-}
+abstract class WidgetController extends \Artovenry\Wp\RestController{}
 

@@ -4,9 +4,10 @@ routes:
 #    capability: staff
     actions:
       - [index]
-      - [create, [POST], {capability: hoge}]
+#      - [create, [POST], {capability: super_staff}]
+      - [create, [POST]]
     routes:
-      "(?P<id>\d+)":
+      "(?P<id>[0-9]+)":
         actions:
           - [read]
           - [update, [PUT]]

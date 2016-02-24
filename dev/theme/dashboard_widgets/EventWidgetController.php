@@ -1,17 +1,20 @@
 <?
 class EventWidgetController extends Artovenry\Wp\Dashboard\WidgetController{
+	static $permitted_params=[
+		"id", "hello"
+	];
+
 	function index(){
-		$events= Event::take(10);
-		return $this->render(["events"=>$events]);
+		return $this->render(["events"=>Event::take(1)]);
 	}
-	function read($id){
-		$event= Event::find($id);
-		return $this->render(["event"=>$event]);
+	function read($params){
+		return $this->render(["event"=>Event::find($params["id"])]);
 	}
-	function create(){
-		
+	function create($params){
+		return $this->render($params["hello"]);
 	}
-	function show(){}
-	function update(){}
+	function update($params){
+		return $this->render($params["hello"]);
+	}
 	function delete(){}
 }
