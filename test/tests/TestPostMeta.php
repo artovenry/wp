@@ -1,4 +1,5 @@
 <?
+
 use Artovenry\Wp\Logger;
 
 class TestPostMeta extends Artovenry\Wp\CustomPost\Test\UnitTestCase{

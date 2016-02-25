@@ -1,6 +1,6 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-require_once __DIR__ . "/Error.php";
+require_once "errors.php";
 
 class Callback{
   private $post_type_class;

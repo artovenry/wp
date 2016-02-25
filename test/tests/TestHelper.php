@@ -29,6 +29,11 @@ class TestHelper extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
 		return $this->assertEquals($expected, raw($result));
 	}
 
+	function test_errors(){
+		$_= new Helper;
+		$event= Test\Event::take();
+	}
+
 	function test_radio_button(){
 		$_= new Helper;
 		$event= Test\Event::take();

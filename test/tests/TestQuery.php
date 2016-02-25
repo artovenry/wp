@@ -24,5 +24,26 @@ class TestQuery extends Artovenry\Wp\CustomPost\Test\UnitTestCase{
     $event->set_meta("show_at_home", "yes");
     $this->assertEquals($event->show_at_home, "yes");
   }
+
+  function test_errors(){
+    try{
+      Event::find(99999);      
+    }catch(Artovenry\Wp\Error $e){
+      $this->assertInstanceOf("Artovenry\Wp\CustomPost\Error",  $e);
+      $this->assertInstanceOf("Artovenry\Wp\CustomPost\RecordNotFound",  $e);
+    }
+    try{
+      $event= Event::take();
+      $event->set_meta("hogehoge", 10);
+    }catch(Artovenry\Wp\Error $e){
+      $this->assertInstanceOf("Artovenry\Wp\CustomPost\AttributeNotDefined",  $e);
+    }
+    try{
+      $event= Event::take();
+      $event->set_meta("scheduled_on", []);
+    }catch(Artovenry\Wp\Error $e){
+      $this->assertInstanceOf("Artovenry\Wp\CustomPost\TypeIsNotScalar",  $e);
+    }
+  }
 }
 

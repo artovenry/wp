@@ -1,5 +1,7 @@
 <?
 namespace Artovenry\Wp\CustomPost\Helper;
+require_once dirname(__DIR__) . "/errors.php";
+
 use Artovenry\Wp\CustomPost;
 trait FormHelper{
 	function radio_button($args){

@@ -1,6 +1,7 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-require_once __DIR__ . "/Error.php";
+require_once "errors.php";
+
 trait PostMeta{
   function create_or_update_meta($attr, $value){
     if(!is_bool($value) AND !is_string($value) AND !is_numeric($value))

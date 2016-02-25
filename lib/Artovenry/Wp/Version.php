@@ -1,17 +1,13 @@
 <?
 namespace Artovenry\Wp;
-use Symfony\Component\Yaml\Yaml;
+use \Symfony\Component\Yaml\Yaml;
+require_once "errors.php";
 
-abstract class Exception extends \Exception{
-  function __construct($message=""){
-    parent::__construct($message);
-  }
-}
-class VersionNotSpecified extends Exception{}
-class VersionOperatorIsInvalid extends Exception{}
-class VersionIsInvalid extends Exception{}
-class PluginNotFound extends Exception{}
-class PluginNotAllowed  extends Exception{}
+class VersionNotSpecified extends Error{}
+class VersionOperatorIsInvalid extends Error{}
+class VersionIsInvalid extends Error{}
+class PluginNotFound extends Error{}
+class PluginNotAllowed  extends Error{}
 
 class Version{
   //You can only specify  "< > <= >= "as version comparator 

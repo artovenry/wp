@@ -13,7 +13,8 @@ class Logger{
   static function log($sql){
     //echo "{$sql}\n";
     //error_log("\n{$sql}\n");
-    error_log("\n{$sql}\n", 3, TEMPLATEPATH . "/tmp/db.log");
+    $path= defined("ART_LOGFILE")? ART_LOGFILE: TEMPLATEPATH . "/db.log";
+    error_log("\n{$sql}\n", 3, $path);
     return $sql;
   }
 }

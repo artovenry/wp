@@ -1,5 +1,7 @@
 <?
 namespace Artovenry\Wp\CustomPost;
+require_once "errors.php";
+
 abstract class Base{
   use Query;
   use PostMeta;

@@ -1,6 +1,4 @@
 <?
 namespace Artovenry\Wp;
 
-abstract class AbstractMetaBox{
-	
-}
+abstract class AbstractMetaBox{}

@@ -1,6 +1,7 @@
 <?
 namespace Artovenry\Wp\CustomPost;
-require_once __DIR__ . "/Error.php";
+require_once "errors.php";
+
 trait Query{
   static function find($id, $raise= true){
     if($post= get_post($id))

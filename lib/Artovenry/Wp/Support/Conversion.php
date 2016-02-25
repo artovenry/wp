@@ -1,5 +1,5 @@
 <?
-namespace Artovenry\Wp;
+namespace Artovenry\Wp\Support;
 use \WP_Post as WP_Post;
 use \Artovenry\Wp\CustomPost;
 
