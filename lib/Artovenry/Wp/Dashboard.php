@@ -1,27 +1,22 @@
 <?
 namespace Artovenry\Wp;
-class Dashboard{
-	const DEFAULT_COLUMN_SIZE= 1;
+class Dashboard extends AbstractMetaBox{
+  const VIEWPATH= "dashboard_widgets";
 
-  protected function __construct(){
-    $this->setup();
-    $this->render();
+  function register(){
+    extract($this->options);
+    wp_add_dashboard_widget($this->prefixed_name, $label, [$this, "render"]);
+  }
+  function render($post, $args){
+    extract($this->options);
+    CustomPost\Haml::render_box($template, [], $this->nonce_key(),$this->nonce_name());
   }
 
-  static function init($options=[]){
-    new static;
+  function __construct($template_name, $label){
+    $options= [
+      "template"=>$template_name,
+      "label"=>$label,
+    ];
+    parent::__construct($template_name, $options);
   }
-
-  function render(){
-    add_action("wp_dashboard_setup", function(){
-      //add_meta_box($name, $label, function(){}, get_current_screen(), "normal", "core");
-    });
-  }
-
-  //[FIXME]
-  function setup(){
-    //[FIXME]
-
-  }
-
 }

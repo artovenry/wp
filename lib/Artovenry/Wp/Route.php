@@ -3,8 +3,8 @@ namespace Artovenry\Wp;
 
 class Route{
 	use Route\Drawer;
-	const REST_NAMESPACE= "art";
-	const OPTION_NAME= "art_routes";
+	const REST_NAMESPACE= ART_PREFIX;
+	const OPTION_NAME= ART_PREFIX . "_" . "routes";
 	private $routes;
 	private $namespace;
 	private static $instance;

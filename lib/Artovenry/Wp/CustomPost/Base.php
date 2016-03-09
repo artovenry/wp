@@ -5,7 +5,7 @@ require_once "errors.php";
 abstract class Base{
   use Query;
   use PostMeta;
-  const DEFAULT_META_PREFIX= "art";
+  const DEFAULT_META_PREFIX= ART_PREFIX;
   const DEFAULT_POST_TYPE_OPTIONS=[
     "public"=>true,
     "supports"=>["title", "editor", "author", "thumbnail",  "excerpt",  "revisions"],

@@ -19,34 +19,19 @@ class Initializer{
 		$options= array_merge(self::DEFAULT_OPTIONS, $options);
 		if(!isset(self::$initializer))
 			self::$initializer= new self($options);
-		self::$initializer->initialize_framework();
 		self::$initializer->initialize_wp();
+		self::$initializer->initialize_framework();
 	}
 
 	function initialize_framework(){
-		$this->define_constants();
+		require_once "constants.php";
 		$this->initialize_models();
 		$this->load_controllers();		
 		$this->initialize_routes();
+		$this->initialize_dashboard();
 	}
 
 	//private
-		private function define_constants(){
-			if(!defined("ART_ENV"))
-				define("ART_ENV", "development");
-			if(!defined("ART_VIEW"))
-				define("ART_VIEW", TEMPLATEPATH . "/views");
-			if(!defined("ART_MODEL"))
-				define("ART_MODEL", TEMPLATEPATH . "/models");
-			if(!defined("ART_CONTROLLERS"))
-				define("ART_CONTROLLERS", TEMPLATEPATH . "/controllers");
-			if(!defined("ART_VERSION_YAML"))
-				define("ART_VERSION_YAML", TEMPLATEPATH . "/version.yml");
-			if(!defined("ART_ROUTES_YAML"))
-				define("ART_ROUTES_YAML", TEMPLATEPATH . "/routes.yml");
-			if(!defined("ART_LOGFILE"))
-				define("ART_LOGFILE", TEMPLATEPATH . "/db.log");
-		}
 		private function initialize_models(){
 			foreach(glob(ART_MODEL . "/*.php") as $filename){
 				$classname= pathinfo($filename)["filename"];
@@ -64,6 +49,23 @@ class Initializer{
 				$classname= pathinfo($filename)["filename"];
 				require_once $filename;
 			}
+		}
+		private function initialize_dashboard(){
+	    if(defined("ART_VIEW"))
+	      $viewpath= join("/", [ART_VIEW, Dashboard::VIEWPATH]);
+	    else
+	      $viewpath= Dashboard::VIEWPATH;
+			add_action("wp_dashboard_setup", function() use($viewpath){
+	      CustomPost\Haml::initialize(Dashboard::VIEWPATH);
+				foreach(glob($viewpath . "/*{.php,.haml}", GLOB_BRACE) as $filename){
+					$template_name= basename($filename);
+					$template_name= explode(".", $template_name)[0];
+					$label= isset($this->options["dashboard_widgets"][$template_name])?
+						$this->options["dashboard_widgets"][$template_name]: $template_name;
+					$widget= new Dashboard($template_name, $label);
+					$widget->register();
+				}
+			});
 		}
 		private function __construct($options){
 			$this->options= $options;

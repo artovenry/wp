@@ -1,5 +1,6 @@
 <?
 namespace Artovenry\Wp\CustomPost;
+use Artovenry\Wp\CsrfAuthorization;
 require_once "errors.php";
 
 class Callback{

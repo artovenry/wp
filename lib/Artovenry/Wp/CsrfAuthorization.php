@@ -1,8 +1,8 @@
 <?
-namespace Artovenry\Wp\CustomPost;
+namespace Artovenry\Wp;
 
 class CsrfAuthorization{
-  const TOKEN_PREFIX= "_art_nonce";
+  const TOKEN_PREFIX= "_" . ART_PRERFIX . "_nonce";
   static function verify($value, $key){
     return wp_verify_nonce($value, $key);
   }
