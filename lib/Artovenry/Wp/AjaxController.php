@@ -3,9 +3,9 @@ namespace Artovenry\Wp;
 require_once "errors.php";
 
 abstract class AjaxController{
-	private $params;
-	private $action;
-	private $request;
+	protected $params;
+	protected $action;
+	protected $request;
 
 	function render($arg=[]){
 		return new \WP_REST_Response((new Support\Conversion($arg))->to_a());
@@ -16,7 +16,9 @@ abstract class AjaxController{
 	}
 	//private
 		private function __construct($request, $action){
-			$this->params= new Parameter($request->get_params());
+			//TODO: implement strong parameter
+			//$this->params= new Parameter($request->get_params());
+			$this->params= $request->get_params();
 			$this->action= $action;
 			$this->request= $request;
 		}		
