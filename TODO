@@ -1,2 +1,3 @@
+AjaxController全般！
 ルートドローイングを行うユーティリティをきちんと作る（あるいはrewrite時にドローイングさせる）
 ActionNotDefinedエラーが適切に呼ばれていない

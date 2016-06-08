@@ -1,4 +1,5 @@
 <?
+//TODO FIXME EVERYTHING!
 namespace Artovenry\Wp;
 require_once "errors.php";
 
