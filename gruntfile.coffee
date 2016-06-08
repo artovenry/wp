@@ -1,6 +1,6 @@
 module.exports= (grunt)->
   PROJECT_NAME= "artovenry wp"
-  HOSTNAME= "192.168.121.199"
+  HOSTNAME= "192.168.1.2"
   PORT= 3000
   PORT_LIVERELOAD= 30000
 
